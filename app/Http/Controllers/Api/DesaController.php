@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Desa;
 use Illuminate\Http\Request;
 
 class DesaController extends Controller
@@ -25,7 +26,18 @@ class DesaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $dataDesa = new Desa;
+        $dataDesa->code = $request->code;
+        $dataDesa->district_code = $request->district_code;
+        $dataDesa->name = $request->name;
+        $dataDesa->meta = $request->meta;
+
+        $post = $dataDesa->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Sukses menambahkan data desa',
+        ]);
     }
 
     /**
@@ -33,7 +45,8 @@ class DesaController extends Controller
      */
     public function show(string $id)
     {
-        $data = \Indonesia::findVillage($id);
+        // $data = \Indonesia::findVillage($id);
+        $data = Desa::find($id);
         if($data) {
             return response()->json([
                 'status' => true,

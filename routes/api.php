@@ -19,8 +19,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('desa', [DesaController::class, 'index']);
-Route::get('desa/{id}', [DesaController::class, 'show']);
-Route::post('desa', [DesaController::class, 'store']);
-Route::put('desa/{id}', [DesaController::class, 'update']);
-Route::delete('desa/{id}', [DesaController::class, 'destroy']);
+Route::apiResource('desa', DesaController::class);
