@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Desa;
 use Illuminate\Http\Request;
+use App\Http\Requests\DesaStoreRequest;
+use Illuminate\Support\Facades\Validator;
 
 class DesaController extends Controller
 {
@@ -27,6 +29,21 @@ class DesaController extends Controller
     public function store(Request $request)
     {
         $dataDesa = new Desa;
+
+        $rules = [
+            'code'          => 'required|unique:indonesia_villages,code',
+            'district_code' => 'required',
+            'name'          => 'required'
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menambahkan data desa',
+                'data' => $validator->errors(),
+            ], 422);
+        }
         $dataDesa->code = $request->code;
         $dataDesa->district_code = $request->district_code;
         $dataDesa->name = $request->name;
@@ -66,7 +83,8 @@ class DesaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
+        
     }
 
     /**
