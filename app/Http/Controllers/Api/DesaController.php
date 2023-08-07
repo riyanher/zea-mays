@@ -83,8 +83,42 @@ class DesaController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        $dataDesa = Desa::find($id);
         
-        
+        if(empty($dataDesa)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Data desa tidak ditemukan',
+            ], 404);
+        }
+
+        $rules = [
+            'code'          => 'required',
+            'district_code' => 'required',
+            'name'          => 'required'
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengubah data desa',
+                'data' => $validator->errors(),
+            ], 422);
+        }
+
+        $dataDesa->code = $request->code;
+        $dataDesa->district_code = $request->district_code;
+        $dataDesa->name = $request->name;
+        $dataDesa->meta = $request->meta;
+
+        $post = $dataDesa->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Sukses mengubah data desa',
+        ]);
     }
 
     /**
