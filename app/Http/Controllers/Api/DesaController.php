@@ -126,6 +126,20 @@ class DesaController extends Controller
      */
     public function destroy(string $id)
     {
+        $dataDesa = Desa::find($id);
         
+        if(empty($dataDesa)){
+            return response()->json([
+                'status' => false,
+                'message' => 'Data desa tidak ditemukan',
+            ], 404);
+        }
+
+        $post = $dataDesa->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Sukses menghapus data desa',
+        ]);
     }
 }
